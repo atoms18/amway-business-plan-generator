@@ -1,0 +1,15 @@
+{
+  "paths": {
+    "@/*": ["*"]
+  },
+  "scripts": {
+    "start": "npm run build && node dist/main.js",
+    "dev": "nodemon ./main.ts",
+    "build": "tsc && tsc-alias"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.0",
+    "tsc-alias": "^1.8.16",
+    "typescript": "^5.9.3"
+  }
+}
