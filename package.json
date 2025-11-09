@@ -1,4 +1,8 @@
 {
+  "name": "amway-bussiness-plan-generator",
+  "version": "0.0.1",
+  "description": "Typescript code that can be use to generate/calculate Amway bussiness orgainize",
+  "license": "MIT",
   "paths": {
     "@/*": ["*"]
   },
