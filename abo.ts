@@ -13,13 +13,14 @@ export class ABO {
         return dl;
     }
 
-    protected isFranchise = false;
     protected income = new Income();
+    
+    private isFranchise = false;
 
     private ppv = 0;
-    protected gpv = 0;
+    private gpv = 0;
     private pv = 0;
-    protected discount = 0;
+    private discount = 0;
 
     getName() {
         return this.name;
@@ -38,6 +39,15 @@ export class ABO {
     }
     getDiscount() {
         return this.discount;
+    }
+    setFranchise(bool: boolean) {
+        this.isFranchise = bool;
+    }
+    setGPV(gpv: number) {
+        this.gpv = gpv;
+    }
+    setDiscount(discount: number) {
+        this.discount = discount;
     }
 
     constructor(protected ul: ABO | null, protected name?: string) {
