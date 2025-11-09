@@ -3,7 +3,16 @@ import { ABO } from "./internal";
 import { DiscountCalculate } from "./util";
 
 export class Income {
-    static PVBV_RATIO = 3.23;
+    private static PVBV_RATIO = 3.23;
+
+    public static SILVER_PRODUCER_PERCENT = 21;
+    private static FRANCHISE_INCOME_PERCENT = 6;
+
+    private static MINIMUM_ฺฺBALANCE_VOLUME = 55_000;
+    private static GARANTEE_VOLUME = 150_000;
+
+    private static RUBY_VOLUME = 300_000;
+    private static RUBY_INCOME_PERCENT = 2;
     
     constructor(
         private discount = 0,
@@ -32,19 +41,19 @@ export class Income {
         this.discount -= fls.reduce((dl_sum, dl) => dl_sum + this.discountIncomeCalculate(dl.getDiscount(), dl.getPV()), 0);
     }
     public setFranchiseIncome(gpv: number, fls: ABO[]) {
-        const fl21percent = fls.filter(fl => fl.getDiscount() == 21);
-        if(gpv >= 55000 || fl21percent.length >= 2) {
-            let garantee = 150_000 - gpv;
+        const flsilver = fls.filter(fl => fl.getDiscount() == Income.SILVER_PRODUCER_PERCENT);
+        if(gpv >= Income.MINIMUM_ฺฺBALANCE_VOLUME || flsilver.length >= 2) {
+            let garantee = Income.GARANTEE_VOLUME - gpv;
             garantee = garantee < 0 ? 0:garantee;
             const franchiseVolume = fls.reduce((vol, fl) => {
-                if(fl.getDiscount() == 21) vol += fl.getPV();
+                if(fl.getDiscount() == Income.SILVER_PRODUCER_PERCENT) vol += fl.getPV();
                 return vol;
             }, 0);
-            this.franchise = this.discountIncomeCalculate(6, franchiseVolume - garantee);
+            this.franchise = this.discountIncomeCalculate(Income.FRANCHISE_INCOME_PERCENT, franchiseVolume - garantee);
         }
     }
     public setRubyIncome(gpv: number) {
-        if(gpv > 300_000) this.ruby = 0.02 * gpv * Income.PVBV_RATIO;
+        if(gpv > Income.RUBY_VOLUME) this.ruby = (Income.RUBY_INCOME_PERCENT / 100) * gpv * Income.PVBV_RATIO;
     }
 
     private discountIncomeCalculate(discount: number, pv: number) {

@@ -1,9 +1,8 @@
 
-import { BuzzoluteABO } from "./custom";
-import { Member } from "./internal";
+import { ABO, Member } from "./internal";
 
-export function flowchart(me: BuzzoluteABO, layer=Infinity) {
-    const display = (abo: BuzzoluteABO) => {
+export function flowchart(me: ABO, layer=Infinity) {
+    const display = (abo: ABO) => {
         if(abo instanceof Member) {
             return `${abo.getName()}
                 member
@@ -16,8 +15,6 @@ export function flowchart(me: BuzzoluteABO, layer=Infinity) {
                 ${abo.getPPV()}ppv
                 ${abo.getGPV()}gpv
                 ${abo.getPV()}pv
-                ${abo.isTurnPro() ? "turn pro":""}
-                ${abo.isTurnProPlus() ? "turn pro plus":""}
                 ii ${abo.getIncome().getDiscount().toFixed(2)}
                 iii ${abo.getIncome().getRuby().toFixed(2)}
                 iv ${abo.getIncome().getFranchise().toFixed(2)}
@@ -27,7 +24,7 @@ export function flowchart(me: BuzzoluteABO, layer=Infinity) {
     }
     let flowchart = "flowchart\n";
     flowchart += `me[${display(me)}]\n`;
-    const nested_flowchart = (fls: BuzzoluteABO[], layer: number, ulname?: string) => {
+    const nested_flowchart = (fls: ABO[], layer: number, ulname?: string) => {
         if(layer >= 2) {
             layer--;
             for(const dl_fl of fls) {

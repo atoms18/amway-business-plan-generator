@@ -64,7 +64,7 @@ export class ABO {
 
         const newPV = this.pv + volume;
         const newDiscount = DiscountCalculate(newPV);
-        if(newDiscount == 21) this.isFranchise = true;
+        if(newDiscount == Income.SILVER_PRODUCER_PERCENT) this.isFranchise = true;
         if(this.isFranchise) return this.franchiseBuy(volume, true);
 
         if(personal) {

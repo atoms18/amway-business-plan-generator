@@ -11,6 +11,7 @@ function pbcopy(data: string) {
     proc.stdin.write(data); proc.stdin.end();
 }
 
+
 const first = new CustomABO(null, 'first').buy(5000);
 
 const front1 = first.sponsor("front1");
@@ -48,6 +49,5 @@ const front3 = first.sponsor("front3").sponsor().buy(5000);
 //     const fl = first.sponsor();
 //     fl.buy(1000);
 // }
-
 
 pbcopy(flowchart(first));
