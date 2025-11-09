@@ -13,7 +13,7 @@ export class ABO {
         return dl;
     }
 
-    protected income = new Income();
+    private income = new Income();
 
     private isFranchise = false;
 
@@ -40,14 +40,11 @@ export class ABO {
     getDiscount() {
         return this.discount;
     }
-    setFranchise(bool: boolean) {
-        this.isFranchise = bool;
+    setPPV(pv: number) {
+        this.ppv = pv;
     }
-    setGPV(gpv: number) {
-        this.gpv = gpv;
-    }
-    setDiscount(discount: number) {
-        this.discount = discount;
+    setPV(pv: number) {
+        this.pv = pv;
     }
 
     constructor(protected ul: ABO | null, protected name?: string) {
@@ -69,29 +66,31 @@ export class ABO {
     }
 
     buy(volume: number): ABO;
-    buy(volume: number, personal: boolean): ABO;
-    buy(volume: number, personal=true): ABO {
-
+    buy(volume: number, dl: ABO | null): ABO;
+    buy(volume: number, dl: ABO | null=null): ABO {
         const newPV = this.pv + volume;
-        const newDiscount = DiscountCalculate(newPV);
-        if(newDiscount == Income.SILVER_PRODUCER_PERCENT) this.isFranchise = true;
-        if(this.isFranchise) return this.franchiseBuy(volume, true);
-
-        if(personal) {
-            this.ppv += volume;
+        if(this.checkIfReachSilverProducer(newPV)) {
+            this.franchiseBuy(volume, dl);
+            return this;
         }
+
+        if(!dl || dl instanceof Member) this.ppv += volume;
         this.gpv += volume;
         this.pv = newPV;
-        this.discount = newDiscount;
+        this.discount = DiscountCalculate(newPV);
 
         this.income.setDiscountIncome(this.pv, this.fls);
         this.income.setRubyIncome(this.gpv);
 
-        if(this.ul) this.ul.buy(volume, false);
+        if(this.ul) this.ul.buy(volume, this);
         return this;
     }
-    private franchiseBuy(volume: number, personal=true): ABO {
-        if(personal) {
+    private franchiseBuy(volume: number, dl: ABO | null=null): void {
+        if(dl) {
+            if(dl?.isFranchise === false) {
+                this.gpv += volume;
+            }
+        } else {
             this.ppv += volume;
             this.gpv += volume;
         }
@@ -102,7 +101,20 @@ export class ABO {
         this.income.setRubyIncome(this.gpv);
         this.income.setFranchiseIncome(this.gpv, this.fls);
 
-        if(this.ul) this.ul.franchiseBuy(volume, false);
-        return this;
+        if(this.ul) this.ul.buy(volume, this);
+    }
+    private checkIfReachSilverProducer(pv: number): boolean {
+        if(this.isFranchise) {
+            return true;
+        }
+        if(DiscountCalculate(pv) == Income.SILVER_PRODUCER_PERCENT) {
+            this.isFranchise = true;
+
+            if(this.ul) {
+                this.ul.gpv -= this.pv;
+            }
+            return true;
+        }
+        return false;
     }
 }
