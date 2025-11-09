@@ -1,12 +1,17 @@
 
 # Amway Business Plan Generator
 
-Typescript code that can be use to generate/calculate Amway business orgainize
+Typescript code that can be use to generate/calculate Amway business orgainize<br>
+Can be use as API  somewhere else to make a Amway-related orgainize/calculate program
 
 - [ x ] Able to calculate the second, third and forth of business plans.
 - [ x ] Support Mermaid program.
 - [ x ] When generate flowchart via Mermaid, now can select how deep of layer to visual.
-- [   ] Support for fifth, 6th, and so on business plans
+- [   ] Support fifth of business plans
+- [   ] Support for 6th-10th of business plans
+
+> This script are based on Amway Thailand region
+> 
 
 ## Prerequisites
 
@@ -20,10 +25,6 @@ $ node -v
 v20.10.0
 $ npm i
 ```
-<!-- > This script use 3 dependencies which is `SheetJS` `fs` and `rwlock`.<br>
-> Rwlock was used to implement a basic solution to \`race condition\` problem.
-> 
-And you have to install above 3 libraries for SpreadJSON to work -->
 
 <!-- ## Table of contents
 
