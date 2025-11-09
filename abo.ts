@@ -4,7 +4,7 @@ import { DiscountCalculate } from "./util";
 
 export class ABO {
     public fls: ABO[] = [];
-    get dls(): ABO[] {
+    public get dls(): ABO[] {
         const dl: ABO[] = [];
         for(const fl of this.fls) {
             dl.push(fl);
@@ -14,7 +14,7 @@ export class ABO {
     }
 
     protected income = new Income();
-    
+
     private isFranchise = false;
 
     private ppv = 0;
