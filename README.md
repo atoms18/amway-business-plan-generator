@@ -1,6 +1,8 @@
 
 # Amway Business Plan Generator
 
+Typescript code that can be use to generate/calculate Amway business orgainize
+
 - [ x ] Able to calculate the second, third and forth of business plans.
 - [ x ] Support Mermaid program.
 - [ x ] When generate flowchart via Mermaid, now can select how deep of layer to visual.
