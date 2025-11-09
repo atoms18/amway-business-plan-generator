@@ -53,7 +53,7 @@ export class Income {
         }
     }
     public setRubyIncome(gpv: number) {
-        if(gpv > Income.RUBY_VOLUME) this.ruby = (Income.RUBY_INCOME_PERCENT / 100) * gpv * Income.PVBV_RATIO;
+        if(gpv > Income.RUBY_VOLUME) this.ruby = this.discountIncomeCalculate(Income.RUBY_INCOME_PERCENT, gpv)
     }
 
     private discountIncomeCalculate(discount: number, pv: number) {
