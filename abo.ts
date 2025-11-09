@@ -80,7 +80,7 @@ export class ABO {
         if(this.ul) this.ul.buy(volume, false);
         return this;
     }
-    franchiseBuy(volume: number, personal=true): ABO {
+    private franchiseBuy(volume: number, personal=true): ABO {
         if(personal) {
             this.ppv += volume;
             this.gpv += volume;
