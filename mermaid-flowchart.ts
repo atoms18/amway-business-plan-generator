@@ -1,7 +1,9 @@
 
+import { BuzzoluteABO } from "./custom";
 import { ABO, Member } from "./internal";
 
-export function flowchart(me: ABO, layer=Infinity) {
+export function flowchart(me: ABO | undefined, layer=Infinity) {
+    if(!me) return;
     const display = (abo: ABO) => {
         if(abo instanceof Member) {
             return `${abo.getName()}
@@ -15,6 +17,8 @@ export function flowchart(me: ABO, layer=Infinity) {
                 ${abo.getPPV()}ppv
                 ${abo.getGPV()}gpv
                 ${abo.getPV()}pv
+                ${abo instanceof BuzzoluteABO && abo.isTurnPro() ? "turn pro":""}
+                ${abo instanceof BuzzoluteABO && abo.isTurnProPlus() ? "turn pro plus":""}
                 ii ${abo.getIncome().getDiscount().toFixed(2)}
                 iii ${abo.getIncome().getRuby().toFixed(2)}
                 iv ${abo.getIncome().getFranchise().toFixed(2)}

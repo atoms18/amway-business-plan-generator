@@ -36,9 +36,9 @@ export class BuzzoluteABO extends ABO {
     }
 
     override buy(volume: number): BuzzoluteABO;
-    override buy(volume: number, personal: boolean): BuzzoluteABO;
-    override buy(volume: number, personal=true): BuzzoluteABO {
-        super.buy(volume, personal);
+    override buy(volume: number, dl: ABO | null): BuzzoluteABO;
+    override buy(volume: number, dl: ABO | null=null): BuzzoluteABO {
+        super.buy(volume, dl);
         return this;
     }
 }

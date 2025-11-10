@@ -48,8 +48,10 @@ export class ABO {
     }
 
     constructor(protected ul: ABO | null, protected name?: string) {
-        if(!this.name && this.ul) {
-            this.name = `${this.ul.name}_${this.ul.fls.length + 1}`;
+        if(this.name) {
+            if(this.ul) this.name = `${this.ul.name}_${this.name}`;
+        } else {
+            if(this.ul) this.name = `${this.ul.name}_${this.ul.fls.length + 1}`;
         }
     }
 
@@ -74,7 +76,7 @@ export class ABO {
             return this;
         }
 
-        if(!dl || dl instanceof Member) this.ppv += volume;
+        if(!dl) this.ppv += volume;
         this.gpv += volume;
         this.pv = newPV;
         this.discount = DiscountCalculate(newPV);
