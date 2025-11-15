@@ -13,18 +13,19 @@ export class ABO {
         return dl;
     }
 
-    private income = new Income();
-
-    public get isPearl(): boolean {
-        const flBreakAway = this.fls.filter(fl => fl.getDiscount() == Income.BREAK_AWAY_DISCOUNT_PERCENT);
-        return flBreakAway.length >= 3;
+    public get isBreakAway() {
+        return this.getDiscount() == Income.BREAK_AWAY_DISCOUNT_PERCENT;
     }
     public get isSilverProducer(): boolean {
-        const flBreakAway = this.fls.filter(fl => fl.getDiscount() == Income.BREAK_AWAY_DISCOUNT_PERCENT);
-        return this.gpv >= Income.SILVER_VOLUME
-                || (this.gpv >= Income.MINIMUM_ฺฺBALANCE_VOLUME && flBreakAway.length == 1)
+        const flBreakAway = this.fls.filter(fl => fl.isBreakAway);
+        return this.gpv >= Income.BREAK_AWAY_VOLUME
+                || (this.gpv >= Income.MINIMUM_ฺBALANCE_VOLUME && flBreakAway.length == 1)
                 || (flBreakAway.length >= 2);
     }
+    public get isPearl(): boolean {
+        return this.fls.filter(fl => fl.isBreakAway).length >= 3;
+    }
+    private income = new Income();
     private isFranchise = false;
 
     private ppv = 0;

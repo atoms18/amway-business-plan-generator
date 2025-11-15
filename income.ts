@@ -5,12 +5,12 @@ import { DiscountCalculate } from "./util";
 export class Income {
     private static PVBV_RATIO = 3.23;
 
-    public static SILVER_VOLUME = 150_000;
+    public static BREAK_AWAY_VOLUME = 150_000;
     public static BREAK_AWAY_DISCOUNT_PERCENT = 21;
-    private static FRANCHISE_INCOME_PERCENT = 6;
 
-    public static MINIMUM_ฺฺBALANCE_VOLUME = 55_000;
-    private static GARANTEE_VOLUME = Income.SILVER_VOLUME;
+    public static MINIMUM_ฺBALANCE_VOLUME = 55_000;
+    private static GARANTEE_VOLUME = Income.BREAK_AWAY_VOLUME;
+    private static FRANCHISE_INCOME_PERCENT = 6;
 
     private static RUBY_VOLUME = 300_000;
     private static RUBY_INCOME_PERCENT = 2;
@@ -52,7 +52,7 @@ export class Income {
         let garantee = Income.GARANTEE_VOLUME - gpv;
         garantee = garantee < 0 ? 0:garantee;
         const franchiseVolume = fls.reduce((vol, fl) => {
-            if(fl.getDiscount() == Income.BREAK_AWAY_DISCOUNT_PERCENT) vol += fl.getPV();
+            if(fl.isBreakAway) vol += fl.getPV();
             return vol;
         }, 0);
         this.franchise = this.discountIncomeCalculate(Income.FRANCHISE_INCOME_PERCENT, franchiseVolume - garantee);
@@ -61,27 +61,46 @@ export class Income {
         if(gpv > Income.RUBY_VOLUME) this.ruby = this.discountIncomeCalculate(Income.RUBY_INCOME_PERCENT, gpv)
     }
     public calculatePearlIncome(fls: ABO[]) {
-        const activeFLs = fls.map((fl) => {
-            // while(fl.getDiscount() != 21 || fl.getGPV() == 0) {
-            //     fl = 
-            // }
-            return fl;
-        });
-        let income = 0;
+        let acc = 0;
         for(const fl of fls) {
-            if(fl.isPearl) continue;
-            income += this.accomulatePearlIncome(fl.fls);
+            if(!fl.isBreakAway) continue; // gonna check only on break-away line because of their pv already accumulate their non-break dls
+
+            let volume = fl.getPV(); // first, assume that fl volume are pearl volume
+            if(fl.isPearl) {
+                volume -= this.calculatePearlVolume(fl); // if fl are pearl, then subtract total with their volume
+            } else {
+                volume -= fl.getGPV(); // if fl not peal, then just subtract total with fl's gpv
+                const garantee = Income.GARANTEE_VOLUME - fl.getGPV();
+                volume -= garantee < 0 ? 0:garantee; // and subtract total with a garantee to ul, now total can already be use as pearl volume
+                volume -= this.accumulateDeepPearlVolume(fl.fls); // but if fl got pearl of their own, subtract total with deep pearl volume
+            }
+            acc += volume;
         }
-        this.pearl = income;
+        this.pearl = this.discountIncomeCalculate(Income.PEARL_INCOME_PERCENT, acc);
     }
-    private accomulatePearlIncome(dlFLs: ABO[]): number {
-        let income = 0;
+    private accumulateDeepPearlVolume(dlFLs: ABO[]): number {
+        let acc = 0;
         for(const dlfl of dlFLs) {
-            if(dlfl.isPearl || dlfl.getDiscount() != 21) continue;
-            income += this.discountIncomeCalculate(Income.PEARL_INCOME_PERCENT, dlfl.getGPV());
-            income += this.accomulatePearlIncome(dlfl.fls);
+            if(!dlfl.isBreakAway) continue;
+            
+            if(dlfl.isPearl) {
+                acc += this.calculatePearlVolume(dlfl);
+            } else {
+                acc += this.accumulateDeepPearlVolume(dlfl.fls); // continue find for possible deep pearl
+            }
         }
-        return income;
+        return acc;
+    }
+    private calculatePearlVolume(dlPearl: ABO): number {
+        // a deep pearl responsible to ul only for their group volume and their break-away's group volume
+        let acc = dlPearl.getPV();
+        acc -= dlPearl.getGPV() < Income.GARANTEE_VOLUME ? Income.GARANTEE_VOLUME:dlPearl.getGPV(); // their group volume
+        for(const dlPearlFL of dlPearl.fls) {
+            if(!dlPearlFL.isBreakAway) continue;
+
+            acc -= dlPearlFL.getGPV() < Income.GARANTEE_VOLUME ? Income.GARANTEE_VOLUME:dlPearlFL.getGPV();  // their break-away's group volume
+        }
+        return acc;
     }
 
     private discountIncomeCalculate(discount: number, pv: number) {

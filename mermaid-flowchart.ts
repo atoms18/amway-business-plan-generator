@@ -13,7 +13,7 @@ export function flowchart(me: ABO | undefined, { layer=Infinity, silverOnly=fals
             `;
         } else {
             return `${abo.getName()}
-                ${abo.getDiscount()}%
+                ${abo.getDiscount()}% ${abo.isSilverProducer ? "silver producer":""}
                 ${abo.getPPV()}ppv
                 ${abo.getGPV()}gpv
                 ${abo.getPV()}pv

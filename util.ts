@@ -13,7 +13,7 @@ export const DiscountCalculate = (pv: number) => {
                         ? 12
                         : pv < 90000
                             ? 15
-                            : pv < Income.SILVER_VOLUME
+                            : pv < Income.BREAK_AWAY_VOLUME
                                 ? 18
-                                : 21;
+                                : Income.BREAK_AWAY_DISCOUNT_PERCENT;
 }
