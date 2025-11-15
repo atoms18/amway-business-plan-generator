@@ -7,7 +7,7 @@ Can be use as API  somewhere else to make a Amway-related orgainize/calculate pr
 - [ x ] Able to calculate the second, third and forth of business plans.
 - [ x ] Support Mermaid program.
 - [ x ] When generate flowchart via Mermaid, now can select how deep of layer to visual.
-- [   ] Support fifth of business plans
+- [ x ] Support fifth of business plans
 - [   ] Support for 6th-10th of business plans
 
 > This script are based on Amway Thailand region
