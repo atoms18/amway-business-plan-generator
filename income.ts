@@ -1,5 +1,5 @@
 
-import { ABO } from "./internal";
+import { ABO, Member } from "./internal";
 import { DiscountCalculate } from "./util";
 
 export class Income {
@@ -65,11 +65,10 @@ export class Income {
         for(const fl of fls) {
             if(!fl.isBreakAway) continue; // gonna check only on break-away line because of their pv already accumulate their non-break dls
 
-            let volume = fl.getPV(); // first, assume that fl volume are pearl volume
+            let volume = fl.fls.filter(fl => !(fl instanceof Member)).reduce((vol, fl) => vol + fl.getPV(), 0); // first, assume that fl volume are fl's abo volume sum
             if(fl.isPearl) {
                 volume -= this.calculatePearlVolume(fl); // if fl are pearl, then subtract total with their volume
             } else {
-                volume -= fl.getGPV(); // if fl not peal, then just subtract total with fl's gpv
                 const garantee = Income.GARANTEE_VOLUME - fl.getGPV();
                 volume -= garantee < 0 ? 0:garantee; // and subtract total with a garantee to ul, now total can already be use as pearl volume
                 volume -= this.accumulateDeepPearlVolume(fl.fls); // but if fl got pearl of their own, subtract total with deep pearl volume
