@@ -2,7 +2,7 @@
 import { BuzzoluteABO } from "./custom";
 import { ABO, Member } from "./internal";
 
-export function flowchart(me: ABO | undefined, layer=Infinity) {
+export function flowchart(me: ABO | undefined, { layer=Infinity, silverOnly=false }={}) {
     if(!me) return;
     const display = (abo: ABO) => {
         if(abo instanceof Member) {
@@ -22,6 +22,7 @@ export function flowchart(me: ABO | undefined, layer=Infinity) {
                 ii ${abo.getIncome().getDiscount().toFixed(2)}
                 iii ${abo.getIncome().getRuby().toFixed(2)}
                 iv ${abo.getIncome().getFranchise().toFixed(2)}
+                v ${abo.getIncome().getPearl().toFixed(2)}
                 T ${Object.values(abo.getIncome()).reduce((acc, cur) => acc + cur, 0).toFixed(2)}
             `;
         }
@@ -32,14 +33,22 @@ export function flowchart(me: ABO | undefined, layer=Infinity) {
         if(layer >= 2) {
             layer--;
             for(const dl_fl of fls) {
-                flowchart += `${ulname} --> ${dl_fl.getName()}[${display(dl_fl)}]\n`;
+                let show = true;
+                if(silverOnly && dl_fl.getDiscount() != 21) {
+                    show = false;
+                }
+                if(show) flowchart += `${ulname} --> ${dl_fl.getName()}[${display(dl_fl)}]\n`;
                 nested_flowchart(dl_fl.fls, layer, dl_fl.getName());
             }
         }
     }
     if(layer > 0) {
         for(const fl of me.fls) {
-            flowchart += `me --> ${fl.getName()}[${display(fl)}]\n`;
+            let show = true;
+            if(silverOnly && fl.getDiscount() != 21) {
+                show = false;
+            }
+            if(show) flowchart += `me --> ${fl.getName()}[${display(fl)}]\n`;
             if(layer > 1) nested_flowchart(fl.fls, layer, fl.getName());
         }
     }
