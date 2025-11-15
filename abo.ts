@@ -15,6 +15,16 @@ export class ABO {
 
     private income = new Income();
 
+    public get isPearl(): boolean {
+        const flBreakAway = this.fls.filter(fl => fl.getDiscount() == Income.BREAK_AWAY_DISCOUNT_PERCENT);
+        return flBreakAway.length >= 3;
+    }
+    public get isSilverProducer(): boolean {
+        const flBreakAway = this.fls.filter(fl => fl.getDiscount() == Income.BREAK_AWAY_DISCOUNT_PERCENT);
+        return this.gpv >= Income.SILVER_VOLUME
+                || (this.gpv >= Income.MINIMUM_ฺฺBALANCE_VOLUME && flBreakAway.length == 1)
+                || (flBreakAway.length >= 2);
+    }
     private isFranchise = false;
 
     private ppv = 0;
@@ -71,7 +81,7 @@ export class ABO {
     buy(volume: number, dl: ABO | null): ABO;
     buy(volume: number, dl: ABO | null=null): ABO {
         const newPV = this.pv + volume;
-        if(this.checkIfReachSilverProducer(newPV)) {
+        if(this.checkIfThisFranchise(newPV)) {
             this.franchiseBuy(volume, dl);
             return this;
         }
@@ -81,8 +91,8 @@ export class ABO {
         this.pv = newPV;
         this.discount = DiscountCalculate(newPV);
 
-        this.income.setDiscountIncome(this.pv, this.fls);
-        this.income.setRubyIncome(this.gpv);
+        this.income.calculateDiscountIncome(this.pv, this.fls);
+        this.income.calculateRubyIncome(this.gpv);
 
         if(this.ul) this.ul.buy(volume, this);
         return this;
@@ -99,17 +109,18 @@ export class ABO {
         this.pv += volume;
         this.discount = DiscountCalculate(this.pv);
 
-        this.income.setDiscountIncome(this.pv, this.fls);
-        this.income.setRubyIncome(this.gpv);
-        this.income.setFranchiseIncome(this.gpv, this.fls);
+        this.income.calculateDiscountIncome(this.pv, this.fls);
+        this.income.calculateRubyIncome(this.gpv);
+        if(this.isSilverProducer) this.income.calculateFranchiseIncome(this.gpv, this.fls);
+        if(this.isPearl) this.income.calculatePearlIncome(this.fls);
 
         if(this.ul) this.ul.buy(volume, this);
     }
-    private checkIfReachSilverProducer(pv: number): boolean {
+    private checkIfThisFranchise(pv: number): boolean {
         if(this.isFranchise) {
             return true;
         }
-        if(DiscountCalculate(pv) == Income.SILVER_PRODUCER_PERCENT) {
+        if(DiscountCalculate(pv) == Income.BREAK_AWAY_DISCOUNT_PERCENT) {
             this.isFranchise = true;
 
             if(this.ul) {

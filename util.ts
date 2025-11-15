@@ -1,3 +1,4 @@
+import { Income } from "./income";
 
 export const DiscountCalculate = (pv: number) => {
     return pv < 2500
@@ -12,7 +13,7 @@ export const DiscountCalculate = (pv: number) => {
                         ? 12
                         : pv < 90000
                             ? 15
-                            : pv < 150000
+                            : pv < Income.SILVER_VOLUME
                                 ? 18
                                 : 21;
 }
