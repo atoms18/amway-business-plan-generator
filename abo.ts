@@ -15,7 +15,7 @@ export class ABO {
     public fls: ABO[] = [];
     public get dls(): ABO[] {
         const dl: ABO[] = [];
-        for(const fl of this.fls) {
+        for(const fl of this.fls.filter(fl => !(fl instanceof Member))) {
             dl.push(fl);
             dl.push(...fl.dls);
         }
