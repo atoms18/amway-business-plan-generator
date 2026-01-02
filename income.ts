@@ -3,7 +3,7 @@ import { ABO, Member } from "./internal";
 import { DiscountCalculate } from "./util";
 
 export class Income {
-    private static PVBV_RATIO = 3.23;
+    public static PVBV_RATIO = 3.23;
 
     public static BREAK_AWAY_VOLUME = 150_000;
     public static BREAK_AWAY_DISCOUNT_PERCENT = 21;

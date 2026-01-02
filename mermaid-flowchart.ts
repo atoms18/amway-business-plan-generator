@@ -9,17 +9,17 @@ export function flowchart(me: ABO | undefined, { layer=Infinity, silverOnly=fals
             return `member
 ${abo.getName()}
 ${abo.context}
-${abo.getPPV()}ppv
-${abo.getPV()}pv
+${abo.getPPV().toFixed(2)}ppv
+${abo.getPV().toFixed(2)}pv
 `;
         } else {
             return `abo
 ${abo.getName()}
 ${abo.context}
 ${abo.getDiscount()}% ${abo.isSilverProducer ? "silver producer":""}
-${abo.getPPV()}ppv
-${abo.getGPV()}gpv
-${abo.getPV()}pv
+${abo.getPPV().toFixed(2)}ppv
+${abo.getGPV().toFixed(2)}gpv
+${abo.getPV().toFixed(2)}pv
 ${abo instanceof BuzzoluteABO && abo.isTurnPro() ? "turn pro":""}
 ${abo instanceof BuzzoluteABO && abo.isTurnProPlus() ? "turn pro plus":""}
 ii ${abo.getIncome().getDiscount().toFixed(2)}

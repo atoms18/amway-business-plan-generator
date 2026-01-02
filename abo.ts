@@ -87,6 +87,9 @@ export class ABO {
         return newMember;
     }
 
+    buyFiat(volume: number): ABO {
+        return this.buy(volume / Income.PVBV_RATIO);
+    }
     buy(volume: number): ABO;
     buy(volume: number, dl: ABO | null): ABO;
     buy(volume: number, dl: ABO | null=null): ABO {
