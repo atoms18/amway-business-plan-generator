@@ -69,9 +69,9 @@ export class ABO {
 
     constructor(protected ul: ABO | null, protected name?: string) {
         if(this.name) {
-            if(this.ul) this.name = `${this.ul.name}_${this.name}`;
+            if(this.ul) this.name = `${this.name}`;
         } else {
-            if(this.ul) this.name = `${this.ul.name}_${this.ul.fls.length + 1}`;
+            if(this.ul) this.name = `${this.ul.fls.length + 1}`;
         }
     }
 
