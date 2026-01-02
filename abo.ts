@@ -1,8 +1,17 @@
 
+import { v4 as uuidv4 } from "uuid";
 import { Income, Member } from "./internal";
 import { DiscountCalculate } from "./util";
 
 export class ABO {
+    public context: string = "";
+    public setContext(context: string): ABO {
+        this.context = context;
+        return this;
+    }
+
+    public UID = uuidv4();
+
     public fls: ABO[] = [];
     public get dls(): ABO[] {
         const dl: ABO[] = [];

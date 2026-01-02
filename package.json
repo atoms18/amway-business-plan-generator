@@ -4,7 +4,9 @@
   "description": "Typescript code that can be use to generate/calculate Amway business orgainize",
   "license": "MIT",
   "paths": {
-    "@/*": ["*"]
+    "@/*": [
+      "*"
+    ]
   },
   "scripts": {
     "start": "npm run build && node dist/main.js",
@@ -15,5 +17,8 @@
     "@types/node": "^24.10.0",
     "tsc-alias": "^1.8.16",
     "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "uuid": "^11.1.0"
   }
 }
